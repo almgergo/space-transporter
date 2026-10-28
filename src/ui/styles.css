@@ -1,0 +1,102 @@
+:root {
+  --bg: #05070d;
+  --surface: #0b0f18;
+  --surface-raised: #121828;
+  --border: #222b3f;
+  --text: #e8ecf4;
+  --text-muted: #8a94a8;
+  --accent: #ffd166;
+  --primary: #2a78d6;
+  --good: #7ee787;
+  --bad: #ff7b72;
+  --font: ui-monospace, 'SF Mono', Menlo, monospace;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 13px/1.45 var(--font); }
+body { display: flex; flex-direction: column; }
+[hidden] { display: none !important; }
+
+h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 16px 0 8px; }
+ul, ol { list-style: none; margin: 0; padding: 0; }
+.muted, .hint { color: var(--text-muted); }
+.good { color: var(--good); }
+.bad, .message { color: var(--bad); }
+
+button {
+  font: inherit; color: var(--text); background: var(--surface-raised);
+  border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; cursor: pointer;
+}
+button:hover:not([disabled]) { border-color: #3a4a6b; }
+button[disabled] { opacity: 0.4; cursor: default; }
+button.primary { background: var(--primary); border-color: var(--primary); }
+
+/* Top bar */
+#top-bar { display: flex; align-items: center; gap: 20px; padding: 10px 16px; border-bottom: 1px solid var(--border); }
+#top-bar .title { font-weight: 600; }
+#top-bar .date { color: var(--accent); font-size: 15px; }
+#top-bar .credits { margin-left: auto; color: var(--accent); font-size: 15px; }
+.warp-group { display: flex; gap: 4px; }
+.warp.active { background: var(--accent); color: #111; border-color: var(--accent); }
+
+/* Layout */
+main { flex: 1; display: flex; min-height: 0; }
+#map { flex: 1; position: relative; min-width: 0; }
+aside { width: 380px; border-left: 1px solid var(--border); padding: 0 16px 16px; overflow-y: auto; }
+
+/* Fleet & contracts */
+.ships li + li, .contracts li + li { margin-top: 6px; }
+.ship { width: 100%; text-align: left; display: flex; flex-direction: column; gap: 2px; }
+.ship.selected { border-color: var(--accent); }
+.details { margin-top: 12px; padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+.details dl { display: grid; grid-template-columns: 64px 1fr; gap: 6px 8px; margin: 0 0 10px; }
+.details dt { color: var(--text-muted); }
+.details dd { margin: 0; }
+.bar { display: inline-block; width: 80px; height: 6px; background: var(--surface-raised); border-radius: 3px; vertical-align: middle; overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--primary); }
+.actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.contract { padding: 8px 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; }
+.contract > button { grid-row: 1 / span 2; grid-column: 2; align-self: center; }
+
+/* Log */
+.log li { color: var(--text-muted); padding: 2px 0; }
+.log li.good { color: var(--good); }
+.log li.warn { color: var(--accent); }
+.log time { color: #5b6580; }
+
+/* Planner overlay */
+#planner {
+  position: absolute; top: 12px; left: 12px; z-index: 10; max-width: calc(100% - 24px); max-height: calc(100% - 24px); overflow: auto;
+  background: rgba(11, 15, 24, 0.96); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+#planner header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+#planner h2 { margin: 0 0 8px; color: var(--text); text-transform: none; letter-spacing: 0; font-size: 14px; }
+.deadline-key { color: var(--accent); }
+.deadline-key::before { content: ''; display: inline-block; width: 16px; border-top: 2px dashed var(--accent); vertical-align: middle; margin-right: 6px; }
+.chart-wrap { position: relative; }
+.chart-wrap canvas { display: block; cursor: crosshair; }
+.tooltip {
+  position: absolute; pointer-events: none; padding: 6px 8px; white-space: nowrap;
+  background: var(--surface-raised); border: 1px solid var(--border); border-radius: 6px; font-size: 12px;
+}
+.legend { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; margin: 4px 0 8px 52px; font-size: 11px; }
+.legend .muted { margin: 0 6px; }
+.swatch { width: 12px; height: 10px; border-radius: 2px; display: inline-block; }
+.swatch.hatched { background: repeating-linear-gradient(135deg, #0b0f18 0 3px, #283247 3px 4px); border: 1px solid var(--border); margin-left: 8px; }
+.ring { width: 10px; height: 10px; border: 2px solid #fff; border-radius: 50%; display: inline-block; margin-left: 8px; }
+.selection-info { display: grid; gap: 2px; margin-bottom: 8px; }
+#planner .actions .spacer { flex: 1; }
+
+/* Contract kinds and shipyard */
+.small { font-size: 11px; }
+.kind { display: inline-block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border); color: var(--text-muted); }
+.kind-express { border-color: #ff7b72; color: #ff9b94; }
+.kind-passengers { border-color: #7ee787; color: #9ef0a4; }
+.kind-bulk { border-color: #8a94a8; }
+.kind-outerSupply { border-color: #b48cf2; color: #c9b0f7; }
+.contract > button { grid-row: 1 / span 3; }
+.shipyard li + li { margin-top: 6px; }
+select { font: inherit; color: var(--text); background: var(--surface-raised); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; }
+#top-bar { flex-wrap: wrap; }
